@@ -1,12 +1,24 @@
-@require './_variables'
-@require './_mixins'
+@require './config'
+@require './nprogress'
+@require './code'
+@require './custom-blocks'
+@require './arrow'
+@require './wrapper'
+@require './toc'
 
-@import './_utilities'
-@import './_roboot'
-@import './_layout'
-@import './_components/_nprogress'
-@import './_components/_code'
-@import './_components/_block'
+html, body
+  padding 0
+  margin 0
+
+body
+  font-family -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  font-size 16px
+  color $textColor
+
+.page
+  padding-left $sidebarWidth
 
 .navbar
   position fixed
@@ -28,76 +40,151 @@
   height 100vh
   display none
 
-.content-block__cont, .content-block__examples
-  padding 0 3rem 0
+.sidebar
+  font-size 15px
+  background-color #fff
+  width $sidebarWidth
+  position fixed
+  z-index 10
+  margin 0
+  top $navbarHeight
+  left 0
+  bottom 0
+  box-sizing border-box
+  border-right 1px solid $borderColor
+  overflow-y auto
 
-.content-block__examples
-  padding-bottom 60px
+.content:not(.custom)
+  @extend $wrapper
+  > *:first-child
+    margin-top $navbarHeight
+  a:hover
+    text-decoration underline
+  p.demo
+    padding 1rem 1.5rem
+    border 1px solid #ddd
+    border-radius 4px
+  img
+    max-width 100%
 
-.category__header-item::before 
-  margin-right 8px
-  content ""
+.content.custom
+  padding 0
+  margin 0
+  img
+    max-width 100%
 
-.category__label, .category__label
-	font-size 15px
+a
+  font-weight 500
+  color $accentColor
+  text-decoration none
 
-.content-block 
-  margin 0rem -6rem 0rem
-
-.page--block-layout 
-	padding 0rem 6rem 0
-
-.page--block-layout .content__footer-container
-  margin 0 -6rem
-
-.sidebar::-webkit-scrollbar 
-  display none
-
-.content table, .content th, .content td {
-  border: none
-}
-
-.content table tr {
-  border-top: 1px solid #eaeaea
-  &:last-child {
-    border-bottom: 1px solid #eaeaea
-  }
-}
-
-.content table tr td:first-child, .content table tr th:first-child {
-  width: 150px
-}
-
-.content table tr td:first-child code {
-  color: #939da3
-  padding: 0
-  background: none
-}
-
-.content span.required 
-  margin-right 4px
-
-.content span.required code
-  color #939da3
-  padding 0.2rem 0.4rem
-
-.navbar a.home-link, .navbar span.home-link, .navbar img.home-link
-  display flex
-  align-items center
-  width 150px
-
-.navbar .home-link .logo
-  flex 0 0 94px
-
-.navbar .home-link .site-name
-  font-size 22px
-  flex 0 0 auto
-  display flex
-  align-items center
-  padding-left 15px
-  height 26px
-  border-left 1px solid rgba(56,69,88,0.1)
+p a code
   font-weight 400
+  color $accentColor
 
-.group__title
-  margin-top 46px
+kbd
+  background #eee
+  border solid 0.15rem #ddd
+  border-bottom solid 0.25rem #ddd
+  border-radius 0.15rem
+  padding 0 0.15em
+
+blockquote
+  font-size 1.2rem
+  color #999
+  border-left .25rem solid #dfe2e5
+  margin-left 0
+  padding-left 1rem
+
+ul, ol
+  padding-left 1.2em
+
+strong
+  font-weight 600
+
+h1, h2, h3, h4, h5, h6
+  font-weight 600
+  line-height 1.25
+  .content:not(.custom) > &
+    margin-top (0.5rem - $navbarHeight)
+    padding-top ($navbarHeight + 1rem)
+    margin-bottom 0
+    &:first-child
+      margin-top -1.5rem
+      margin-bottom 1rem
+      + p, + pre, + .custom-block
+        margin-top 2rem
+  &:hover .header-anchor
+    opacity: 1
+
+h1
+  font-size 2.2rem
+
+h2
+  font-size 1.65rem
+  padding-bottom .3rem
+  border-bottom 1px solid $borderColor
+
+h3
+  font-size 1.35rem
+
+a.header-anchor
+  font-size 0.85em
+  float left
+  margin-left -0.87em
+  padding-right 0.23em
+  margin-top 0.125em
+  opacity 0
+  &:hover
+    text-decoration none
+
+code, kbd, .line-number
+  font-family source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace
+
+p, ul, ol
+  line-height 1.7
+
+hr
+  border 0
+  border-top 1px solid $borderColor
+
+table
+  border-collapse collapse
+  margin 1rem 0
+  display: block
+  overflow-x: auto
+
+tr
+  border-top 1px solid #dfe2e5
+  &:nth-child(2n)
+    background-color #f6f8fa
+
+th, td
+  border 1px solid #dfe2e5
+  padding .6em 1em
+
+.custom-layout
+  padding-top $navbarHeight
+
+.theme-container
+  &.sidebar-open
+    .sidebar-mask
+      display: block
+  &.no-navbar
+    .content:not(.custom) > h1, h2, h3, h4, h5, h6
+        margin-top 1.5rem
+        padding-top 0
+    .sidebar
+      top 0
+    .custom-layout
+      padding-top 0
+
+
+@media (min-width: ($MQMobile + 1px))
+  .theme-container.no-sidebar
+    .sidebar
+      display none
+    .page
+      padding-left 0
+
+@require './mobile.styl'
